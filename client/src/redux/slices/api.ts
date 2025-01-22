@@ -9,7 +9,7 @@ import {
 
 export const api = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:4000",
+    baseUrl: "https://codecraft-5eaq.onrender.com",
     credentials: "include",
   }),
   tagTypes: ["myCodes", "allCodes"],
