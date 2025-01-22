@@ -39,8 +39,9 @@ export const signup = async (req: Request, res: Response) => {
     res.cookie("token", jwtToken, {
       path: "/",
       expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
-      httpOnly: true,
-      sameSite: "lax",
+      httpOnly: true, // Prevent client-side JS access
+      sameSite: "none", // Required for cross-origin
+      secure: true, // Ensures cookies are sent over HTTPS
     });
 
     return res.status(201).send({
