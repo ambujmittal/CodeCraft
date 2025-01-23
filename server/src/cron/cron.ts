@@ -1,9 +1,10 @@
 import cron from "cron";
-import https from "https";
+import https, { RequestOptions } from "https";
 
 const URL = "https://codecraft-5eaq.onrender.com";
 
-const job = new cron.CronJob("*/14 * * * *", function () {
+// Function to make the GET request
+const makeGetRequest = () => {
   https
     .get(URL, (res) => {
       if (res.statusCode === 200) {
@@ -12,9 +13,12 @@ const job = new cron.CronJob("*/14 * * * *", function () {
         console.log("GET request failed", res.statusCode);
       }
     })
-    .on("error", (e) => {
+    .on("error", (e: NodeJS.ErrnoException) => {
       console.error("Error while sending request", e);
     });
-});
+};
+
+// Define the cron job
+const job = new cron.CronJob("*/14 * * * *", makeGetRequest);
 
 export default job;

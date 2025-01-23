@@ -6,7 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const cron_1 = __importDefault(require("cron"));
 const https_1 = __importDefault(require("https"));
 const URL = "https://codecraft-5eaq.onrender.com";
-const job = new cron_1.default.CronJob("*/14 * * * *", function () {
+// Function to make the GET request
+const makeGetRequest = () => {
     https_1.default
         .get(URL, (res) => {
         if (res.statusCode === 200) {
@@ -19,5 +20,7 @@ const job = new cron_1.default.CronJob("*/14 * * * *", function () {
         .on("error", (e) => {
         console.error("Error while sending request", e);
     });
-});
+};
+// Define the cron job
+const job = new cron_1.default.CronJob("*/14 * * * *", makeGetRequest);
 exports.default = job;
