@@ -5,8 +5,10 @@ import { dbConnect } from "./lib/dbConnect";
 import { compilerRouter } from "./routes/compilerRouter";
 import { userRouter } from "./routes/userRouter";
 import cookieParser from "cookie-parser";
-const app = express();
+import job from "./cron/cron";
 
+const app = express();
+job.start();
 app.use(express.json());
 app.use(cookieParser());
 app.use(

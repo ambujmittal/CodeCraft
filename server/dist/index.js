@@ -10,7 +10,9 @@ const dbConnect_1 = require("./lib/dbConnect");
 const compilerRouter_1 = require("./routes/compilerRouter");
 const userRouter_1 = require("./routes/userRouter");
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
+const cron_1 = __importDefault(require("./cron/cron"));
 const app = (0, express_1.default)();
+cron_1.default.start();
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
 app.use((0, cors_1.default)({
