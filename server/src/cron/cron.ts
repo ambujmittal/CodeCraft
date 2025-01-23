@@ -1,5 +1,5 @@
-import cron from "cron";
-import https, { RequestOptions } from "https";
+import { CronJob } from "cron";
+import https from "https";
 
 const URL = "https://codecraft-5eaq.onrender.com";
 
@@ -19,6 +19,6 @@ const makeGetRequest = () => {
 };
 
 // Define the cron job
-const job = new cron.CronJob("*/14 * * * *", makeGetRequest);
+const job = new CronJob("*/14 * * * *", makeGetRequest);
 
 export default job;
