@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import { tags as t } from "@lezer/highlight";
 import { draculaInit } from "@uiw/codemirror-theme-dracula";
@@ -9,6 +9,7 @@ import { updateCodeValue } from "@/redux/slices/compilerSlice";
 import io from "socket.io-client";
 import debounce from "lodash.debounce";
 import { useParams } from "react-router-dom";
+import { toast } from "sonner";
 
 //"http://localhost:4000"
 const socket: SocketIOClient.Socket = io(
@@ -30,7 +31,47 @@ export default function CodeEditor() {
   const fullCode = useSelector(
     (state: RootState) => state.compilerSlice.fullCode
   );
+  const currentUser = useSelector(
+    (state: RootState) => state.appSlice.currentUser
+  );
   const dispatch = useDispatch();
+  const userID = currentUser.email;
+  const userName = currentUser.username || "Guest";
+
+  const [activeTypingUser, setActiveTypingUser] = useState<string | null>(null);
+
+  const emitTypingEvent = useMemo(
+    () =>
+      debounce((isTyping: boolean) => {
+        socket.emit(isTyping ? "start-typing" : "stop-typing", {
+          userID,
+          userName,
+        });
+      }, 400),
+    []
+  );
+  useEffect(() => {
+    socket.on(
+      "user-typing",
+      ({ userID, userName }: { userID: string; userName: string }) => {
+        if (activeTypingUser !== userID) {
+          setActiveTypingUser(userID);
+          toast(`${userName} is typing...`);
+        }
+      }
+    );
+
+    socket.on("user-stopped-typing", ({ userID }: { userID: string }) => {
+      if (activeTypingUser === userID) {
+        setActiveTypingUser(null);
+      }
+    });
+
+    return () => {
+      socket.off("user-typing");
+      socket.off("user-stopped-typing");
+    };
+  }, [activeTypingUser]);
 
   const emitCodeChange = useMemo(
     () =>
@@ -66,6 +107,8 @@ export default function CodeEditor() {
     (value: string) => {
       dispatch(updateCodeValue(value));
       emitCodeChange(value);
+      emitTypingEvent(true);
+      setTimeout(() => emitTypingEvent(false), 2000);
     },
     [dispatch]
   );

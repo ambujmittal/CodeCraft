@@ -40,6 +40,13 @@ io.on("connection", (socket) => {
     socket.on("code-change", (code: string) => {
       socket.broadcast.to(roomID).emit("update-code", code);
     });
+    socket.on("start-typing", ({ userID, userName }) => {
+      socket.to(roomID).emit("user-typing", { userID, userName });
+    });
+
+    socket.on("stop-typing", ({ userID }) => {
+      socket.to(roomID).emit("user-stopped-typing", { userID });
+    });
   });
 
   socket.on("disconnect", () => {

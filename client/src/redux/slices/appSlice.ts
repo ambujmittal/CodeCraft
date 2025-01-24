@@ -11,7 +11,7 @@ export interface appSliceState {
 }
 
 const initialState: appSliceState = {
-  currentUser: {},
+  currentUser: { username: "Guest", email: "", savedCodes: [] },
   isLoggedIn: false,
   windowWidth: window.innerWidth,
 };
