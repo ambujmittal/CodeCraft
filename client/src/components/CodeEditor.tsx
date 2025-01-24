@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import { tags as t } from "@lezer/highlight";
 import { draculaInit } from "@uiw/codemirror-theme-dracula";
@@ -6,6 +6,22 @@ import { loadLanguage } from "@uiw/codemirror-extensions-langs";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { updateCodeValue } from "@/redux/slices/compilerSlice";
+import io from "socket.io-client";
+import debounce from "lodash.debounce";
+import { useParams } from "react-router-dom";
+
+//"http://localhost:4000"
+const socket: SocketIOClient.Socket = io(
+  "https://codecraft-5eaq.onrender.com",
+  {
+    transports: ["websocket"],
+    transportOptions: {
+      websocket: {
+        withCredentials: true,
+      },
+    },
+  }
+);
 
 export default function CodeEditor() {
   const currentLanguage = useSelector(
@@ -16,9 +32,40 @@ export default function CodeEditor() {
   );
   const dispatch = useDispatch();
 
+  const emitCodeChange = useMemo(
+    () =>
+      debounce((newCode: string) => {
+        socket.emit("code-change", newCode);
+      }, 300),
+    []
+  );
+  const { urlId: RoomID } = useParams();
+
+  useEffect(() => {
+    if (!socket) return;
+
+    socket.once("load-code", (code: string) => {
+      dispatch(updateCodeValue(code));
+    });
+    socket.emit("join-room", RoomID);
+    return () => {
+      socket.off("load-code");
+    };
+  }, [RoomID]);
+
+  useEffect(() => {
+    socket.on("update-code", (newCode: string) =>
+      dispatch(updateCodeValue(newCode))
+    );
+    return () => {
+      socket.off("update-code");
+    };
+  }, []);
+
   const onChange = React.useCallback(
     (value: string) => {
       dispatch(updateCodeValue(value));
+      emitCodeChange(value);
     },
     [dispatch]
   );
