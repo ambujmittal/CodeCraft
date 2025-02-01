@@ -196,7 +196,11 @@ export default function HelperHeader() {
             )}
             <Dialog>
               <DialogTrigger asChild>
-                <Button title="Share Code" size="icon" variant="success">
+                <Button
+                  title="Collaborate with others"
+                  size="icon"
+                  variant="success"
+                >
                   <Share2 size={18} />
                 </Button>
               </DialogTrigger>

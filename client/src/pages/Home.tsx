@@ -11,8 +11,8 @@ export default function Home() {
         CodeCraft
       </h1>
       <p className="text-lg sm:text-2xl text-gray-400 text-center px-4 max-w-2xl">
-        Compile HTML, CSS, and JavaScript code in real time, and share your work
-        with your friends!
+        Real-time collaborative editor with live code compilation for HTML, CSS,
+        and JavaScript
       </p>
       {!isLoggedIn && (
         <div className="mt-6 flex flex-col sm:flex-row gap-4">
