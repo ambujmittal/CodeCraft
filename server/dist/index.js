@@ -12,11 +12,9 @@ const compilerRouter_1 = require("./routes/compilerRouter");
 const userRouter_1 = require("./routes/userRouter");
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const socket_io_1 = require("socket.io");
-const cron_1 = __importDefault(require("./cron/cron"));
 const Code_1 = require("./models/Code");
 const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
-cron_1.default.start();
 const io = new socket_io_1.Server(server, {
     cors: {
         origin: ["http://localhost:5173", process.env.CLIENT_URL],

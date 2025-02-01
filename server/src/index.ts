@@ -7,12 +7,10 @@ import { compilerRouter } from "./routes/compilerRouter";
 import { userRouter } from "./routes/userRouter";
 import cookieParser from "cookie-parser";
 import { Server as SocketIOServer } from "socket.io";
-import job from "./cron/cron";
 import { Code } from "./models/Code";
 
 const app = express();
 const server = http.createServer(app);
-job.start();
 
 const io = new SocketIOServer(server, {
   cors: {
