@@ -1,6 +1,6 @@
 # CodeCraft Compiler
 
-A powerful online code compiler built with React, Node.js, and WebSockets for real-time execution and collaboration.
+A powerful online code compiler built with React.js, Node.js, and WebSockets for real-time execution and collaboration.
 
 ## 🚀 Live Demo
 
@@ -20,10 +20,24 @@ A powerful online code compiler built with React, Node.js, and WebSockets for re
 
 ## 🔧 Tech Stack
 
-- **Frontend:** React, Tailwind CSS, ShadCN UI, CodeMirror, TypeScript, Zod, and Redux Toolkit
-- **Backend:** Node.js, Express, MongoDB, and TypeScript
-- **Real-Time:** Socket.IO
-- **Deployment:** Vercel for frontend and Render for backend
+### **Frontend:**
+
+- React.js
+- TypeScript
+- Tailwind CSS & Shadcn (UI)
+- CodeMirror (Code Editor)
+- Zod (Schema Validation)
+- Redux Toolkit (State Management)
+
+### **Backend:**
+
+- Node.js & Express.js
+- TypeScript
+- MongoDB (Mongoose ORM)
+
+### **Real-Time Functionality:**
+
+- Socket.IO (WebSockets for Live Collaboration)
 
 ## 📜 Usage
 
